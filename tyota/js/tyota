@@ -1,0 +1,139 @@
+'use strict';
+
+var gBoard;
+var gLevel = 16;
+var gNums;
+var gNum = 1
+var startTime;
+
+function onInit() {
+    gBoard = createBoard();
+    gNums = generateRandomNumbers(gLevel);
+    fillBoard(gNums);
+    renderBoard(gBoard);
+    console.log(gLevel);
+    startTime = Date.now();
+    setInterval(updateTimer, 500);
+    nextNum();
+
+    console.table(gBoard);
+
+}
+
+onInit();
+function createBoard() {
+    var size = 4
+    var board = [];
+    for (var i = 0; i < size; i++) {
+        board[i] = [];
+        for (var j = 0; j < size; j++) {
+            board[i][j] = '0'; 
+        }
+    }
+    return board;
+}
+
+function renderBoard(board) {
+    var strHtml = '';
+
+    for (var i = 0; i < 4; i++) {
+        strHtml += `<tr>`;
+        for (var j = 0; j < 4; j++) {
+            strHtml += `<td onclick="onCellClick(${i},${j}, this)" data-i="${i}" data-j="${j}">${board[i][j]}</td>`;
+        }
+        strHtml += `</tr>`;
+    }
+
+    const elBoard = document.querySelector('.my-table');
+    elBoard.innerHTML = strHtml;
+
+    console.table(board);
+}
+
+function generateRandomNumbers(gLevel) {
+    const nums = [];
+
+    while (nums.length < gLevel) {
+        const random_number = Math.floor(Math.random() * gLevel) + 1;
+
+        // Ensure that the generated random number is not already in the array
+        if (!nums.includes(random_number)) {
+            nums.push(random_number);
+        }
+    }
+
+    return nums;
+}
+
+function fillBoard(nums) {
+    var count = 0;
+
+    for (var i = 0; i < 4; i++) {
+        for (var j = 0; j < 4; j++) {
+            gBoard[i][j] = nums[count];
+            count++;
+        }
+    }
+}
+
+function onCellClick(row, col, elCell) {
+    var cellValue = gNums[row * 4 + col];
+    if (cellValue === gNum) {
+        console.log('Clicked on cell (' + row + ',' + col + ') with value: ' + cellValue);
+        gNum++;
+        // elCell.innerHTML = cellValue; // עדכן את התא בערך המספר
+        elCell.style.backgroundColor = 'blue'; // לדוג', שינוי צבע הרקע לדוגמה
+    }
+
+    updateTimer();
+
+}
+
+
+function updateTimer() {
+    var currentTime = Date.now();
+    var elapsedTime = currentTime - startTime;
+    var seconds = Math.floor(elapsedTime / 1000);
+    var minutes = Math.floor(seconds / 60);
+
+    var timerElement = document.getElementById('timer');
+    timerElement.innerHTML = 'timer: ' + minutes + 'm ' + seconds % 60 + 's';
+}
+//  onCellClick(row, col, elCell)
+
+
+function nextNum() {
+    gNum = 0
+    gNum++; // הוסף 1 ל-mNum בכל הפעם שהפונקציה נקראת
+    var nextNumElement = document.getElementById('next-numer');
+    nextNumElement.innerHTML = 'next-numer: ' + gNum; // הוסף סוגריים סופיים למחרוזת
+}
+
+
+// const CELL_STATUS = {
+// HIDDEN: 'hidden',
+// MINE: 'mine',
+// NUMBER: 'number',
+// MARKED: 'marked',
+// }
+
+
+
+function onCellClick(i, j, elCell) {
+    var cellContent = gBoard[i][j];
+
+    if (cellContent.isMine) {
+        elCell.innerHTML = '💥';
+        endGame(false); 
+    } else {
+        var minesAroundCount = countMinesAround(i, j);
+        elCell.innerHTML = minesAroundCount;
+
+        // צפה במספר המוקשים מסביב בצורה רחבה
+        if (minesAroundCount === 0) {
+            revealWide(i, j);
+        }
+    }
+
+    elCell.classList.remove('hidden'); // הסר את המחלקה 'hidden' כדי להציג את התוכן של התא
+}

@@ -1,0 +1,170 @@
+'use strict';
+
+var gCurrQuestIdx;
+var gQuests = [];
+var gResults = [];
+
+onInit();
+
+function onInit() {
+    gCurrQuestIdx = 0;
+    gQuests = createQuests();
+    
+}
+
+function createQuests() {
+    var quests = [
+        { id: 1, opts: ['Cow', 'Dog'], correctOptIdx: 0, img: '1.jpg' },
+        { id: 2, opts: ['Butterfly', 'Cat'], correctOptIdx: 1, img: '2.jpg' },
+        { id: 3, opts: ['Fish', 'Dog'], correctOptIdx: 1, img: '3.jpg' }
+    ];
+
+    return quests;
+}
+
+function renderQuest() {
+    var imageElement = document.getElementById('image');
+    var optionsElement = document.getElementById('options');
+    var buttonsContainer = document.getElementById('buttons-container'); // New container for buttons
+
+    if (gCurrQuestIdx < gQuests.length) {
+        var currQuest = gQuests[gCurrQuestIdx];
+
+        // Display options before the image
+        displayOptions(currQuest);
+
+        // Preload image before displaying
+        var preloadImage = new Image();
+        preloadImage.onload = function () {
+            // Display the image
+            imageElement.src = currQuest.img;
+            imageElement.style.display = 'inline'; // Show the image after it's loaded
+        };
+        preloadImage.src = currQuest.img;
+
+        // Remove existing buttons and create new ones
+        buttonsContainer.innerHTML = '';
+        createButton('Next Question', nextQuestion);
+        createButton('Retry', retry);
+
+    } else {
+        clearInterval(gInterval);
+        console.log('Game Over. Results:', gResults);
+    }
+
+    gCurrQuestIdx++;
+}
+
+function createButton(text, clickHandler) {
+    var button = document.createElement('button');
+    button.textContent = text;
+    button.onclick = clickHandler;
+    buttonsContainer.appendChild(button);
+}
+
+function nextQuestion() {
+    renderQuest();
+}
+
+function retry() {
+    gCurrQuestIdx = 0;
+    gResults = [];
+    onInit();
+}
+
+// ... (Your existing code)
+
+
+function checkAnswer(selectedOptionIdx, correctOptionIdx) {
+    var result = selectedOptionIdx === correctOptionIdx ? 'Correct' : 'Incorrect';
+    gResults.push(result);
+    console.log('Result:', result);
+
+    if (result === 'Correct') {
+        // Move to the next question
+        renderQuest();
+    } else {
+        // Prompt the user to try again
+        alert('Incorrect! Please try again');
+    }
+    
+}
+
+
+
+// 'use strict';
+
+// var gInterval;
+// var gTimeout;
+
+// var gQuests = [
+//     { id: 1, opts: ['Cow', 'Dog'], correctOptIdx: 0 },
+//     { id: 2, opts: ['Cat', 'Bat'], correctOptIdx: 1 }
+// ];
+
+// console.log(gQuests);
+
+// clearInterval(gInterval);
+// gInterval = setInterval(createQuests); 
+
+// function initGame() {
+//     createQuests()
+// }
+
+// function createQuests() {
+//     gCurrQuestIdx = 0
+//     for (var i = 0; i < gQuests.length; i++) {
+//         var gCurrQuestIdx = items[i]
+//         if (gCurrQuestIdx === item) return true
+//     }
+//     return false
+//     }
+        
+
+// function onToggleGame(elBtn) {
+//     if(gGameInterval) {
+//         clearInterval(gGameInterval)
+//         gGameInterval = 0
+//         elBtn.innerText = gCurrQuestIdx // לתקם שם כפתור בהתאם לשאלה
+//     } else {
+//         gGameInterval = setInterval(play, gCurrQuestIdx)
+//         elBtn.innerText = gCurrQuestIdx
+//     }
+// }
+// function renderQuest() {
+//     function renderQuest() {
+//         var strHtml = '';
+//         for (var i = 0; i < gQuests.length; i++) {
+//             var Quests = gQuests[i];
+//             strHtml += `
+//                 <div onclick="cow(this)" 
+//                     class="balloon balloon${balloon.id}" 
+//             </div>
+//             `;
+//             gap += 100
+//         }
+//     }
+// }
+
+// function checkAnswer(optIdx) {
+
+// }
+
+
+// var gAnimals = {
+//     birds: ['bird', 'fish'],
+//     mammals: ['bunny', 'mouse']
+// };
+
+// function addBQuests(newAnimel) { //להוסיף עוד שאלות עם חיות
+
+//     for (var i = 0; i < gAnimals; i++) {
+//         var newAnimel = {
+//             id: i + 1,
+//             opts: 12,
+//             correctOptIdx: i +1
+//         }
+//         gQuests.push(newAnimel);
+//     };
+
+// }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My first project</title>
+    <link rel="stylesheet" href="css\main.css">
+    <style>
+    </style>
+</head>
+
+<body onload="onInit()">
+    <h1>
+        <h1>Mine Sweeper💣</h1>
+    </h1>
+    <div id="timer"></div>
+    <div class="mines"> mines: <span class="sum-container"></span>
+    </div>
+    <div class="life"> lives:💜💜💜 </div>
+    <div class="buttons-container">
+        <!-- <h3><span class="msg hide">VICTORY</span></h3>  -->
+
+        <div class="buttons-container">
+            <button class="levels1" onclick="chooseLevel({ size: 4, mines: 2 })">Easy</button>
+            <button class="levels1" onclick="chooseLevel({ size: 8, mines: 12 })">Hard</button>
+            <button class="levels1" onclick="chooseLevel({ size: 12, mines: 30 })">Extreme</button>
+
+        </div>
+    </div>
+    </div>
+
+    <button onclick="restartGame()" class="restart-button" style="display: none;">Restart Game</button>
+    <table border="1" class="my-table"></table>
+
+    <script src="js/main.js"></script>
+    <script src="js/board.js"></script>
+
+</body>
+
+</html>
